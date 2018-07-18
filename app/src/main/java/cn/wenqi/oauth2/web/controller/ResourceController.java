@@ -1,7 +1,19 @@
 package cn.wenqi.oauth2.web.controller;
 
+import cn.wenqi.oauth2.web.service.StorageService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * @author wenqi
@@ -11,9 +23,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/resources")
 public class ResourceController {
 
+    @Autowired
+    private StorageService storageService;
+
     @RequestMapping("/manage")
     public String page(){
-
         return "resources";
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+        storageService.store(file);
+        return ResponseEntity.ok("上传成功");
     }
 }

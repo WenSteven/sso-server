@@ -1,12 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th=http://www.thymeleaf.org>
 <head>
     <meta charset="UTF-8">
     <title>资源管理</title>
+    <script src="/webjars/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.1.0/jquery.js}"></script>
 </head>
 <body>
 <div></div>
+<div><a href="index.html" th:href="@{/}">首页</a> </div>
 <div><a href="resources.html" >资源查看</a></div>
-<div><a href="resources.html" >上传</a></div>
+<div>
+
+    <form method="post" enctype="multipart/form-data" action="resources.html" id="upload-file-form" th:action="@{/resources/upload}">
+        选择文件：<input type="file" name="file" />
+        <input type="button" name="上传" id="upload"/>
+    </form>
+    <span id="upload-file-message"></span>
+</div>
 </body>
+<script th:inline="javascript">
+    var csrf_token=/*[[${_csrf.token}]]*/ ss233;
+    var csrf_name=/*[[${_csrf.headerName}]]*/ ss233;
+    $('#upload').on('click',function(){
+            $.ajax({
+                url: '/resources/upload',
+                type: "POST",
+                data: new FormData($("#upload-file-form")[0]),
+                enctype: 'multipart/form-data',
+                processData: false,
+                contentType: false,
+                cache: false,
+                name:'file',
+                beforeSend: function(xhr){
+                    xhr.setRequestHeader(csrf_name, csrf_token);
+                },
+                success: function () {
+                    // Handle upload success
+                    $("#upload-file-message").text("File succesfully uploaded");
+                },
+                error: function () {
+                    // Handle upload error
+                    $("#upload-file-message").text(
+                        "File not uploaded (perhaps it's too much big)");
+                }
+            });
+    })
+</script>
 </html>
