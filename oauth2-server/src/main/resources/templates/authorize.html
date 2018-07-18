@@ -1,0 +1,27 @@
+<html  xmlns:th=http://www.thymeleaf.org>
+<head>
+	<meta charset="UTF-8">
+	<title>授权确认</title>
+	<link href="/webjars/bootstrap/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"
+		  rel="stylesheet">
+	<script src="/webjars/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.1.0/jquery.js}"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+	<div class="jumbotron">
+		<h2>是否允许下列授权选项：</h2>
+		<p th:inline="text">
+            [[${authorizationRequest.clientId}]]想在在网站[[${authorizationRequest.redirectUri}]]获取[[${authorizationRequest.scope}]]权限，是否允许？
+		</p>
+		<form id="confirmationForm" name="confirmationForm"
+			action="../oauth/authorize" th:action="@{/oauth/authorize}" method="post">
+			<input name="user_oauth_approval" value="true" type="hidden" />
+			<button class="btn btn-primary" type="submit">允许</button>
+		</form>
+		<form id="denyForm" name="confirmationForm" action="../oauth/authorize" th:action="@{/oauth/authorize}" method="post">
+			<input name="user_oauth_approval" value="false" type="hidden" />
+			<button class="btn btn-primary" type="submit">拒绝</button>
+		</form>
+	</div>
+</body>
+</html>

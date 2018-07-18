@@ -1,0 +1,26 @@
+server:
+  port: 8002
+  session:
+    cookie:
+      name: APPSESSIONID
+security:
+  oauth2:
+    client:
+      access-token-uri: http://localhost:8080/uaa/oauth/token
+      client-id: web
+      user-authorization-uri: http://localhost:8080/uaa/oauth/authorize
+      client-secret: web_secret
+      scope: read,write
+      grant-type: authorization_code
+    resource:
+     user-info-uri: http://localhost:8080/uaa/me
+  basic:
+    enabled: false
+spring:
+  thymeleaf:
+    mode: LEGACYHTML5
+logging:
+  level:
+    root: info
+    org.springframework.security: trace
+    org.springframework.security.oauth2: INFO
