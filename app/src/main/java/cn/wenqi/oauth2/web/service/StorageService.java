@@ -21,6 +21,11 @@ public interface StorageService {
 
     Path load(String filename);
 
+    /**
+     * 文件名
+     * @param filename
+     * @return
+     */
     Resource loadAsResource(String filename);
 
     void deleteAll();

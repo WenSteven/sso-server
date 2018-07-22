@@ -31,6 +31,8 @@ logging:
     root: info
     org.springframework.security: trace
     org.springframework.security.oauth2: INFO
+api:
+  url: http://localhost:9077
 ---
 storage:
   location: /amourling/images/

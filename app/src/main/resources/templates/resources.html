@@ -8,7 +8,7 @@
 <body>
 <div></div>
 <div><a href="index.html" th:href="@{/}">首页</a> </div>
-<div><a href="resources.html" >资源查看</a></div>
+<div><a href="IResources.html" >资源查看</a></div>
 <div>
 
     <form method="post" enctype="multipart/form-data" action="resources.html" id="upload-file-form" th:action="@{/resources/upload}">
@@ -16,6 +16,10 @@
         <input type="button" name="上传" id="upload"/>
     </form>
     <span id="upload-file-message"></span>
+</div>
+<div>
+    <img src="index.html" th:src="@{/resources/get(name=1532231639411.png)}" />
+    <video th:src="@{/resources/get(name=1532231838124.mp4)}">视频</video>
 </div>
 </body>
 <script th:inline="javascript">
