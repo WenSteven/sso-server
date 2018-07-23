@@ -7,7 +7,12 @@ import cn.wenqi.oauth2.service.service.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author wenqi
@@ -24,10 +29,26 @@ public class IResourceServiceImpl implements IResourceService {
         iResourcesRepository.save(IResources);
     }
 
+    private  List<String> videos= Arrays.asList("mp4","rmvb","mov");
+
+    private List<String> imgs=Arrays.asList("png","jpg","gif","jpeg");
+
     @Override
     public PageInfo<IResources> select(Integer pageNo, Integer pageSize) {
-        Page<IResources> page= iResourcesRepository.findAll(new PageRequest(pageNo-1,pageSize));
+        // ext 0:其他  1：图片 2：视频
+        Specification<IResources> specification= (root, criteriaQuery, criteriaBuilder) ->
+                criteriaQuery.orderBy(criteriaBuilder.desc(root.get("createTime").as(Date.class))).getRestriction();
+        Page<IResources> page= iResourcesRepository.findAll(specification,new PageRequest(pageNo-1,pageSize));
         PageInfo<IResources> pageInfo=new PageInfo<>();
+        List<IResources> iResources=page.getContent();
+        iResources.parallelStream().forEach(r->{
+                if(videos.contains(r.getExt()))
+                    r.setExt("2");
+                else if(imgs.contains(r.getExt()))
+                    r.setExt("1");
+                else
+                    r.setExt("0");
+        });
         pageInfo.setData(page.getContent());
         pageInfo.setTotalCount(page.getTotalElements());
         pageInfo.setTotalPages(page.getTotalPages());

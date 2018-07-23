@@ -76,13 +76,13 @@ public class ResourceController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<PageInfo> getList(Integer pageNo,Integer pageSize){
+    public ResponseEntity<PageInfo> getList(@RequestParam(defaultValue = "0") Integer pageNo,
+                                            @RequestParam(defaultValue = "10") Integer pageSize){
         ParameterizedTypeReference<PageInfo<IResources>> typeRef = new ParameterizedTypeReference<PageInfo<IResources>>() {};
         ResponseEntity<PageInfo<IResources>> entity=restTemplate
                 .exchange(apiServerProps.getUrl()+"/res/list?pageNo="+pageNo+"&pageSize="+pageSize,
                 HttpMethod.GET,null,typeRef);
         assert entity.getStatusCode()!=HttpStatus.INTERNAL_SERVER_ERROR;
-        log.info("list is {}",entity.getBody().getData());
         return ResponseEntity.ok(entity.getBody());
     }
 }

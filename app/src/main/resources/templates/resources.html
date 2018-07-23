@@ -2,53 +2,87 @@
 <html lang="en" xmlns:th=http://www.thymeleaf.org>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width">
     <title>资源管理</title>
     <script src="/webjars/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.1.0/jquery.js}"></script>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"
           rel="stylesheet">
+    <script src="/webjars/bootstrap/3.3.7/js/modal.js"
+            th:src="@{/webjars/bootstrap/3.3.7/js/modal.js}"></script>
+    <script src="../static/js/common.js" th:src="@{/js/common.js}"></script>
 </head>
 <body>
-<div></div>
-<div><a href="index.html" th:href="@{/}">首页</a> </div>
-<div><a href="IResources.html" >资源查看</a></div>
-<div>
-
-    <form method="post" enctype="multipart/form-data" action="resources.html" id="upload-file-form" th:action="@{/resources/upload}">
-        选择文件：<input type="file" name="file" />
-        <input type="button" name="上传" id="upload" value="Upload"/>
+<div class="container">
+    <a href="index.html" th:href="@{/}">首页</a>
+</div>
+<div class="container">
+    <form method="post" enctype="multipart/form-data" action="resources.html" id="upload-file-form"
+          th:action="@{/resources/upload}">
+        选择文件：<input type="file" name="file"/>
+        <input type="button" name="上传" id="upload" value="Upload" class="btn btn-primary btn-sm"/>
     </form>
     <span id="upload-file-message"></span>
 </div>
-<div>
-    <img src="index.html" th:src="@{/resources/get/5}" />
-    <video th:src="@{/resources/get/4}">视频</video>
+<div class="container">
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>文件格式</th>
+                <th>上传时间</th>
+                <th>查看详情</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:remove="all">
+                <td>1</td>
+                <td>2016-4-2</td>
+                <td>2016-4-2</td>
+                <td>2016-4-2</td>
+                <td>wenqi</td>
+            </tr>
+            </tbody>
+        </table>
+        <h6 class="text-right" id="show"></h6>
+        <nav aria-label="分页">
+            <ul class="pager">
+                <li><a href="javascript:void(0)" class="pre">上一页</a></li>
+                <li><a href="javascript:void(0)" class="next">下一页</a></li>
+            </ul>
+            <input type="hidden" id="currentPage">
+        </nav>
+    </div>
 </div>
 </body>
 <script th:inline="javascript">
-    var csrf_token=/*[[${_csrf.token}]]*/ ss233;
-    var csrf_name=/*[[${_csrf.headerName}]]*/ ss233;
-    $('#upload').on('click',function(){
-            $.ajax({
-                url: '/resources/upload',
-                type: "POST",
-                data: new FormData($("#upload-file-form")[0]),
-                enctype: 'multipart/form-data',
-                processData: false,
-                contentType: false,
-                cache: false,
-                name:'file',
-                beforeSend: function(xhr){
-                    xhr.setRequestHeader(csrf_name, csrf_token);
-                },
-                success: function () {
-                    // Handle upload success
-                    $("#upload-file-message").text("File succesfully uploaded");
-                },
-                error: function () {
-                    // Handle upload error
-                    $("#upload-file-message").text("File not uploaded ");
-                }
-            });
+    var csrf_token = /*[[${_csrf.token}]]*/ ss233;
+    var csrf_name = /*[[${_csrf.headerName}]]*/ ss233;
+    $('#upload').on('click', function () {
+        $.ajax({
+            url: '/resources/upload',
+            type: "POST",
+            data: new FormData($("#upload-file-form")[0]),
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false,
+            name: 'file',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader(csrf_name, csrf_token);
+            },
+            success: function () {
+                // Handle upload success
+                $("#upload-file-message").text("File succesfully uploaded");
+            },
+            error: function () {
+                // Handle upload error
+                $("#upload-file-message").text("File not uploaded ");
+            }
+        });
     })
 </script>
+<script src="../static/js/resources.js" th:src="@{/js/resources.js}"></script>
+<link href="../static/css/resources.css" th:href="@{/css/resources.css}" rel="stylesheet">
 </html>
