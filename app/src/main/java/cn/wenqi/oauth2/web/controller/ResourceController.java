@@ -1,11 +1,19 @@
 package cn.wenqi.oauth2.web.controller;
 
-import cn.wenqi.oauth2.web.service.StorageService;
+import cn.wenqi.oauth2.constant.CommonConstant;
+import cn.wenqi.oauth2.entity.IResources;
+import cn.wenqi.oauth2.entity.PageInfo;
+import cn.wenqi.oauth2.web.conf.ApiServerProps;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 /**
  * @author wenqi
@@ -24,10 +33,17 @@ import java.nio.file.Paths;
  */
 @Controller
 @RequestMapping("/resources")
+@Slf4j
 public class ResourceController {
 
     @Autowired
-    private StorageService storageService;
+    private RestTemplate restTemplate;
+
+    private final ApiServerProps apiServerProps;
+
+    public ResourceController(ApiServerProps apiServerProps){
+        this.apiServerProps=apiServerProps;
+    }
 
     @RequestMapping("/manage")
     public String page(){
@@ -36,12 +52,40 @@ public class ResourceController {
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
-        storageService.store(file);
+        String filePath=tempStore(file);
+        Resource resource=new FileSystemResource(filePath);
+        HttpHeaders httpHeaders=new HttpHeaders();
+        MediaType mediaType=MediaType.parseMediaType("multipart/form-data;charset=UTF-8");
+        httpHeaders.setContentType(mediaType);
+        MultiValueMap<String,Object> valueMap=new LinkedMultiValueMap<>();
+        valueMap.add("file",resource);
+        HttpEntity<MultiValueMap<String,Object>> reqEntity=new HttpEntity<>(valueMap,httpHeaders);
+        ResponseEntity<String> responseEntity=restTemplate.exchange(apiServerProps.getUrl()+"/res/add",HttpMethod.POST,reqEntity,String.class);
+        Files.delete(Paths.get(filePath));
+        assert CommonConstant.SUCCESS.equals(responseEntity.getBody());
         return ResponseEntity.ok("上传成功");
     }
 
+    private String tempStore(MultipartFile file) throws IOException {
+        String fileName=file.getOriginalFilename();
+        String ext=fileName.substring(fileName.lastIndexOf("."));
+        String filePath= "/Users/wenqi/Develop/tmp/"+System.currentTimeMillis()+ext;
+        Files.write(Paths.get(filePath),file.getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
+        return filePath;
+    }
     @GetMapping("/get")
     public ResponseEntity<Resource> getResources(String name){
-       return ResponseEntity.ok(storageService.loadAsResource(name)) ;
+        ResponseEntity<Resource> responseEntity=restTemplate.getForEntity(apiServerProps.getUrl()+"/res/get?name="+name,Resource.class);
+        return ResponseEntity.ok(responseEntity.getBody());
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<PageInfo> getList(Integer pageNo,Integer pageSize){
+        ParameterizedTypeReference<PageInfo<IResources>> typeRef = new ParameterizedTypeReference<PageInfo<IResources>>() {};
+        ResponseEntity<PageInfo<IResources>> entity=restTemplate.exchange(apiServerProps.getUrl()+"/res/list?pageNo="+pageNo+"&pageSize="+pageSize,
+                HttpMethod.GET,null,typeRef);
+        assert entity.getStatusCode()!=HttpStatus.INTERNAL_SERVER_ERROR;
+        log.info("list is {}",entity.getBody().getData());
+        return ResponseEntity.ok(entity.getBody());
     }
 }

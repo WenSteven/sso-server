@@ -10,6 +10,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
   profiles:
     active: dev
 security:
@@ -28,3 +29,13 @@ logging:
     root: info
     org.springframework.security: trace
     org.springframework.security.oauth2: INFO
+---
+storage:
+  location: /amourling/images/
+spring:
+  profiles: prod
+---
+storage:
+  location: /Users/wenqi/Develop/images
+spring:
+  profiles: dev

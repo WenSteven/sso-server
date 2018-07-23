@@ -1,4 +1,4 @@
-package cn.wenqi.oauth2.web.conf;
+package cn.wenqi.oauth2.service.conf;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

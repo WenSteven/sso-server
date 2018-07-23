@@ -33,13 +33,3 @@ logging:
     org.springframework.security.oauth2: INFO
 api:
   url: http://localhost:9077
----
-storage:
-  location: /amourling/images/
-spring:
-  profiles: prod
----
-storage:
-  location: /Users/wenqi/Develop/images
-spring:
-  profiles: dev

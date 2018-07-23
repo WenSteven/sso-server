@@ -1,5 +1,6 @@
-package cn.wenqi.oauth2.web.service;
+package cn.wenqi.oauth2.service.service;
 
+import cn.wenqi.oauth2.entity.UploadResources;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

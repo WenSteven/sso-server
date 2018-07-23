@@ -1,4 +1,4 @@
-package cn.wenqi.oauth2.web.exception;
+package cn.wenqi.oauth2.service.exception;
 
 /**
  * @author wenqi

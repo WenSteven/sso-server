@@ -1,18 +1,15 @@
-package cn.wenqi.oauth2.web.service.impl;
+package cn.wenqi.oauth2.service.service.impl;
 
-import cn.wenqi.oauth2.constant.CommonConstant;
 import cn.wenqi.oauth2.entity.IResources;
-import cn.wenqi.oauth2.web.conf.ApiServerProps;
-import cn.wenqi.oauth2.web.exception.StorageException;
-import cn.wenqi.oauth2.web.exception.StorageFileNotFoundException;
-import cn.wenqi.oauth2.web.conf.StorageProperties;
-import cn.wenqi.oauth2.web.service.StorageService;
+import cn.wenqi.oauth2.service.conf.StorageProperties;
+import cn.wenqi.oauth2.service.exception.StorageException;
+import cn.wenqi.oauth2.service.exception.StorageFileNotFoundException;
+import cn.wenqi.oauth2.service.repository.IResourcesRepository;
+import cn.wenqi.oauth2.service.service.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Date;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 /**
@@ -33,13 +31,10 @@ import java.util.stream.Stream;
 @Slf4j
 public class FileSystemStorageService implements StorageService {
 
-    @Autowired
-    private OAuth2RestTemplate restTemplate;
-
-    @Autowired
-    private ApiServerProps apiServerProps;
-
     private final Path rootLocation;
+
+    @Autowired
+    private IResourcesRepository iResourcesRepository;
 
     @Autowired
     public FileSystemStorageService(StorageProperties properties) {
@@ -50,15 +45,15 @@ public class FileSystemStorageService implements StorageService {
     public String store(MultipartFile file) throws IOException {
         String fileName=file.getOriginalFilename();
         String ext=fileName.substring(fileName.lastIndexOf("."));
-        String filePath= rootLocation.toString()+"/"+System.currentTimeMillis()+ext;
+        String name=UUID.randomUUID().toString();
+        String filePath= rootLocation.toString()+"/"+name+ext;
         Files.write(Paths.get(filePath),file.getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
-
+        log.info("已保存，开始写入db...");
         IResources iResources=new IResources();
-        iResources.setExt(ext);
-        iResources.setName(filePath);
         iResources.setCreateTime(new Date());
-        ResponseEntity<String> responseEntity=restTemplate.postForEntity(apiServerProps.getUrl()+"/res/add",iResources,String.class);
-        assert CommonConstant.SUCCESS.equals(responseEntity.getBody());
+        iResources.setName(name);
+        iResources.setExt(ext.substring(1));
+        iResourcesRepository.save(iResources);
         return filePath;
     }
 
@@ -83,13 +78,10 @@ public class FileSystemStorageService implements StorageService {
     @Override
     public Resource loadAsResource(String filename) {
         Resource resource = new FileSystemResource(load(filename).toFile());
-        if (resource.exists() || resource.isReadable()) {
+        if (resource.exists() || resource.isReadable())
             return resource;
-        }
-        else {
+        else
             throw new StorageFileNotFoundException("Could not read file: " + filename);
-
-        }
     }
 
     @Override
