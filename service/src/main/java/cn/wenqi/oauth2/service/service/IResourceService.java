@@ -13,4 +13,6 @@ public interface IResourceService {
 
 
     PageInfo<IResources> select(Integer pageNo, Integer pageSize);
+
+    IResources selectById(Integer id);
 }

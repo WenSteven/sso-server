@@ -33,4 +33,9 @@ public class IResourceServiceImpl implements IResourceService {
         pageInfo.setTotalPages(page.getTotalPages());
         return pageInfo;
     }
+
+    @Override
+    public IResources selectById(Integer id) {
+        return iResourcesRepository.findOne(id);
+    }
 }

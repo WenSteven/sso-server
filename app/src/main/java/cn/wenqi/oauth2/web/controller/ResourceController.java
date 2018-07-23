@@ -7,22 +7,17 @@ import cn.wenqi.oauth2.web.conf.ApiServerProps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.FileSystem;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
@@ -73,16 +68,18 @@ public class ResourceController {
         Files.write(Paths.get(filePath),file.getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
         return filePath;
     }
-    @GetMapping("/get")
-    public ResponseEntity<Resource> getResources(String name){
-        ResponseEntity<Resource> responseEntity=restTemplate.getForEntity(apiServerProps.getUrl()+"/res/get?name="+name,Resource.class);
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Resource> getResources(@PathVariable("id") Integer id){
+        ResponseEntity<Resource> responseEntity=restTemplate
+                .getForEntity(apiServerProps.getUrl()+"/res/get/"+id,Resource.class);
         return ResponseEntity.ok(responseEntity.getBody());
     }
 
     @GetMapping("/list")
     public ResponseEntity<PageInfo> getList(Integer pageNo,Integer pageSize){
         ParameterizedTypeReference<PageInfo<IResources>> typeRef = new ParameterizedTypeReference<PageInfo<IResources>>() {};
-        ResponseEntity<PageInfo<IResources>> entity=restTemplate.exchange(apiServerProps.getUrl()+"/res/list?pageNo="+pageNo+"&pageSize="+pageSize,
+        ResponseEntity<PageInfo<IResources>> entity=restTemplate
+                .exchange(apiServerProps.getUrl()+"/res/list?pageNo="+pageNo+"&pageSize="+pageSize,
                 HttpMethod.GET,null,typeRef);
         assert entity.getStatusCode()!=HttpStatus.INTERNAL_SERVER_ERROR;
         log.info("list is {}",entity.getBody().getData());

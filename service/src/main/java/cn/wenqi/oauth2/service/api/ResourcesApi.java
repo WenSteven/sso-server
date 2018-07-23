@@ -4,6 +4,7 @@ import cn.wenqi.oauth2.constant.CommonConstant;
 import cn.wenqi.oauth2.entity.IResources;
 import cn.wenqi.oauth2.entity.PageInfo;
 import cn.wenqi.oauth2.entity.UploadResources;
+import cn.wenqi.oauth2.service.conf.StorageProperties;
 import cn.wenqi.oauth2.service.service.IResourceService;
 import cn.wenqi.oauth2.service.service.StorageService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,9 @@ public class ResourcesApi {
     @Autowired
     private IResourceService iResourceService;
 
+    @Autowired
+    private StorageProperties storageProperties;
+
 
     @PostMapping("/add")
     public ResponseEntity<String> addResources(@RequestParam("file")MultipartFile file, Principal principal) throws IOException {
@@ -43,8 +47,10 @@ public class ResourcesApi {
     }
 
 
-    @GetMapping("/get")
-    public ResponseEntity<Resource> getResource(String name){
+    @GetMapping("/get/{id}")
+    public ResponseEntity<Resource> getResource(@PathVariable("id") Integer id){
+        IResources iResources=iResourceService.selectById(id);
+        String name=iResources.getName()+"."+iResources.getExt();
         return ResponseEntity.ok(storageService.loadAsResource(name));
     }
 

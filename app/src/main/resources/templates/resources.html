@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>资源管理</title>
     <script src="/webjars/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.1.0/jquery.js}"></script>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"
+          rel="stylesheet">
 </head>
 <body>
 <div></div>
@@ -13,13 +15,13 @@
 
     <form method="post" enctype="multipart/form-data" action="resources.html" id="upload-file-form" th:action="@{/resources/upload}">
         选择文件：<input type="file" name="file" />
-        <input type="button" name="上传" id="upload"/>
+        <input type="button" name="上传" id="upload" value="Upload"/>
     </form>
     <span id="upload-file-message"></span>
 </div>
 <div>
-    <img src="index.html" th:src="@{/resources/get(name=1532231639411.png)}" />
-    <video th:src="@{/resources/get(name=1532231838124.mp4)}">视频</video>
+    <img src="index.html" th:src="@{/resources/get/5}" />
+    <video th:src="@{/resources/get/4}">视频</video>
 </div>
 </body>
 <script th:inline="javascript">
@@ -44,8 +46,7 @@
                 },
                 error: function () {
                     // Handle upload error
-                    $("#upload-file-message").text(
-                        "File not uploaded (perhaps it's too much big)");
+                    $("#upload-file-message").text("File not uploaded ");
                 }
             });
     })

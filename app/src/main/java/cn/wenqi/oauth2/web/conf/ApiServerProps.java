@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Data
 public class ApiServerProps {
     /**
-     * 第三方服务所在url
+     * api服务所在url
      */
     private String url;
 }
