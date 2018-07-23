@@ -17,12 +17,23 @@
     <a href="index.html" th:href="@{/}">首页</a>
 </div>
 <div class="container">
-    <form method="post" enctype="multipart/form-data" action="resources.html" id="upload-file-form"
-          th:action="@{/resources/upload}">
-        选择文件：<input type="file" name="file"/>
-        <input type="button" name="上传" id="upload" value="Upload" class="btn btn-primary btn-sm"/>
+    <form method="post" class="form-horizontal" role="form"  enctype="multipart/form-data" action="resources.html" id="upload-file-form"
+          th:action="@{/resources/upload}" >
+        <div class="form-group">
+            <label for="choose_file" class="col-sm-1 control-label">选择文件</label>
+            <div class="col-sm-2">
+                <input type="file" name="file" id="choose_file" />
+            </div>
+            <div class="col-sm-2">
+                <input type="button" name="上传" id="upload" value="上传" class="btn btn-success btn-lg btn-block" />
+            </div>
+        </div>
     </form>
     <span id="upload-file-message"></span>
+</div>
+<hr />
+<div class="container text-center">
+    <b>=======资源列表=======</b>
 </div>
 <div class="container">
     <div class="table-responsive">
@@ -57,31 +68,8 @@
 </div>
 </body>
 <script th:inline="javascript">
-    var csrf_token = /*[[${_csrf.token}]]*/ ss233;
-    var csrf_name = /*[[${_csrf.headerName}]]*/ ss233;
-    $('#upload').on('click', function () {
-        $.ajax({
-            url: '/resources/upload',
-            type: "POST",
-            data: new FormData($("#upload-file-form")[0]),
-            enctype: 'multipart/form-data',
-            processData: false,
-            contentType: false,
-            cache: false,
-            name: 'file',
-            beforeSend: function (xhr) {
-                xhr.setRequestHeader(csrf_name, csrf_token);
-            },
-            success: function () {
-                // Handle upload success
-                $("#upload-file-message").text("File succesfully uploaded");
-            },
-            error: function () {
-                // Handle upload error
-                $("#upload-file-message").text("File not uploaded ");
-            }
-        });
-    })
+    var csrf_token = /*[[${_csrf.token}]]*/ ss233
+    var csrf_name = /*[[${_csrf.headerName}]]*/ ss233
 </script>
 <script src="../static/js/resources.js" th:src="@{/js/resources.js}"></script>
 <link href="../static/css/resources.css" th:href="@{/css/resources.css}" rel="stylesheet">

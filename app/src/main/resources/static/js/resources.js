@@ -67,3 +67,32 @@ $('.next').on('click', function () {
         loadData(page);
     }
 });
+
+$('#upload').on('click', function () {
+
+    if($("#choose_file").val()==''){
+        alert("请选择要上传的文件")
+        return
+    }
+    $.ajax({
+        url: '/resources/upload',
+        type: "POST",
+        data: new FormData($("#upload-file-form")[0]),
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        cache: false,
+        name: 'file',
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader(csrf_name, csrf_token);
+        },
+        success: function () {
+            // Handle upload success
+            $("#upload-file-message").text("File succesfully uploaded");
+        },
+        error: function () {
+            // Handle upload error
+            $("#upload-file-message").text("File not uploaded ");
+        }
+    });
+})
