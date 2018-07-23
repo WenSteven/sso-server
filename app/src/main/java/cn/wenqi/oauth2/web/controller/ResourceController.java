@@ -46,7 +46,7 @@ public class ResourceController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws IOException {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,String desc) throws IOException {
         String filePath=tempStore(file);
         Resource resource=new FileSystemResource(filePath);
         HttpHeaders httpHeaders=new HttpHeaders();
@@ -54,6 +54,7 @@ public class ResourceController {
         httpHeaders.setContentType(mediaType);
         MultiValueMap<String,Object> valueMap=new LinkedMultiValueMap<>();
         valueMap.add("file",resource);
+        valueMap.add("desc",desc);
         HttpEntity<MultiValueMap<String,Object>> reqEntity=new HttpEntity<>(valueMap,httpHeaders);
         ResponseEntity<String> responseEntity=restTemplate.exchange(apiServerProps.getUrl()+"/res/add",HttpMethod.POST,reqEntity,String.class);
         Files.delete(Paths.get(filePath));

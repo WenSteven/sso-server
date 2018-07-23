@@ -42,7 +42,7 @@ public class FileSystemStorageService implements StorageService {
     }
 
     @Override
-    public String store(MultipartFile file) throws IOException {
+    public String store(MultipartFile file, String desc) throws IOException {
         String fileName=file.getOriginalFilename();
         String ext=fileName.substring(fileName.lastIndexOf("."));
         String name=UUID.randomUUID().toString();
@@ -53,6 +53,7 @@ public class FileSystemStorageService implements StorageService {
         iResources.setCreateTime(new Date());
         iResources.setName(name);
         iResources.setExt(ext.substring(1));
+        iResources.setDescribe(desc);
         iResourcesRepository.save(iResources);
         return filePath;
     }

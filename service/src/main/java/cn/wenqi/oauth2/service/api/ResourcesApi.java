@@ -1,23 +1,20 @@
 package cn.wenqi.oauth2.service.api;
 
 import cn.wenqi.oauth2.constant.CommonConstant;
-import cn.wenqi.oauth2.entity.IResources;
-import cn.wenqi.oauth2.entity.PageInfo;
-import cn.wenqi.oauth2.entity.UploadResources;
-import cn.wenqi.oauth2.service.conf.StorageProperties;
+import cn.wenqi.oauth2.entity.*;
+import cn.wenqi.oauth2.service.repository.ClickerRepository;
 import cn.wenqi.oauth2.service.service.IResourceService;
 import cn.wenqi.oauth2.service.service.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.security.Principal;
-import java.util.List;
+import java.util.Date;
 
 /**
  * @author wenqi
@@ -36,21 +33,30 @@ public class ResourcesApi {
     private IResourceService iResourceService;
 
     @Autowired
-    private StorageProperties storageProperties;
+    private ClickerRepository clickerRepository;
 
 
     @PostMapping("/add")
-    public ResponseEntity<String> addResources(@RequestParam("file")MultipartFile file, Principal principal) throws IOException {
-        storageService.store(file);
+    public ResponseEntity<String> addResources(@RequestParam("file")MultipartFile file,
+                                               @RequestParam("desc") String desc,
+                                               Principal principal) throws IOException {
+        storageService.store(file, desc);
         log.info("认证信息是：{}",principal.getName());
         return ResponseEntity.ok(CommonConstant.SUCCESS);
     }
 
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Resource> getResource(@PathVariable("id") Integer id){
+    public ResponseEntity<Resource> getResource(@PathVariable("id") Integer id,Principal principal){
         IResources iResources=iResourceService.selectById(id);
         String name=iResources.getName()+"."+iResources.getExt();
+        Clicker clicker=new Clicker();
+        clicker.setClickTime(new Date());
+        clicker.setIResources(iResources);
+        Users users=new Users();
+        users.setUserName(principal.getName());
+        clicker.setUsers(users);
+        clickerRepository.save(clicker);
         return ResponseEntity.ok(storageService.loadAsResource(name));
     }
 

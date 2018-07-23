@@ -36,4 +36,9 @@ public class IResources {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
+    /**
+     * 描述
+     */
+    @Column(name = "res_describe")
+    private String describe;
 }

@@ -1,6 +1,5 @@
 package cn.wenqi.oauth2.service.service;
 
-import cn.wenqi.oauth2.entity.UploadResources;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,7 +15,7 @@ public interface StorageService {
 
     void init();
 
-    String store(MultipartFile file) throws IOException;
+    String store(MultipartFile file, String desc) throws IOException;
 
     Stream<Path> loadAll();
 

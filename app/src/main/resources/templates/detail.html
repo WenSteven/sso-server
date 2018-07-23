@@ -5,9 +5,17 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width">
     <link href="/webjars/bootstrap/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"
           rel="stylesheet">
+    <script src="/webjars/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.1.0/jquery.js}"></script>
     <title>文件详情</title>
 </head>
 <body>
+<div class="container">
+    文件描述：<p th:utext="${desc}"/>
+</div>
+<div class="container">
+    上传时间：<p th:text="${t}"/>
+</div>
+<hr />
 <div th:if="${ext.equals('1')}" class="container">
     <img src="detail.html" th:src="@{/resources/get/{id}(id=${id})}" style="width: 100%;height: auto"/>
 </div>
@@ -17,5 +25,36 @@
 <div th:if="${ext.equals('0')}" class="container">
     <p>当前文件暂时不支持查看</p>
 </div>
+<hr/>
+<div class="container" >
+    累计访问次数：<span >10</span>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>姓名</th>
+                <th>访问时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:remove="all">
+                <td>1</td>
+                <td>2016-4-2</td>
+                <td>2016-4-2</td>
+            </tr>
+            </tbody>
+        </table>
+        <h6 class="text-right" id="show"></h6>
+        <nav aria-label="分页">
+            <ul class="pager">
+                <li><a href="javascript:void(0)" class="pre">上一页</a></li>
+                <li><a href="javascript:void(0)" class="next">下一页</a></li>
+            </ul>
+            <input type="hidden" id="currentPage">
+        </nav>
+    </div>
+</div>
 </body>
+<script th:src="@{/js/detail.js}" src="../static/js/detail.js"></script>
 </html>

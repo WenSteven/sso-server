@@ -15,14 +15,13 @@ function loadData(page) {
                 data.data.forEach(function (item, index) {
                     $('table').append("<tr>" +
                         "<td>" + (index + 1) + "</td>" +
-                        "<td>" + item.ext + "</td>" +
-                        "<td>" + item.createTime + "</td>" +
-                        "<td><a href='/resources/detail/"+item.rid+"?ext="+item.ext+"'>查看</a></td>"+
+                        "<td>" + parse(item.ext) + "</td>" +
+                        "<td>" + substring0(item.describe)+"</td>" +
+                        "<td><a href='/resources/detail/"+item.rid+"?ext="+item.ext+"&desc="+encodeURI(item.describe)+"&t="+encodeURI(item.createTime)+"'>查看</a></td>"+
                         "</tr>")
                 });
-
                 var pager = localStorage.getItem('page');
-                $('#show').text('共' + data.totalPages + '页,' + data.totalCount + '条记录');
+                $('#show').text('共' + data.totalPages + '页,' + data.totalCount + '条记录,当前第'+pager+'页');
                 $('#currentPage').val(pager);
                 if (data.totalPages == pager) {
                     $('.next').parent().addClass('disabled');
@@ -50,6 +49,19 @@ $(document).ready(function () {
     localStorage.setItem('page','1');
     loadData(1);
 });
+
+function parse(type){
+  if(type=='1')
+      return'图片';
+  if(type=='2')
+      return '视频';
+}
+
+function substring0(str){
+    if(str!=null)
+        return str.substring(0,10)+'...'
+    return '暂未填写'
+}
 
 $('.pre').on('click', function () {
     if (!$(this).parent().hasClass('disabled')) {
@@ -88,7 +100,11 @@ $('#upload').on('click', function () {
         },
         success: function () {
             // Handle upload success
-            $("#upload-file-message").text("File succesfully uploaded");
+            alert("上传成功");
+            $('#desc').val('')
+            $('#choose_file').val('')
+            var page=parseInt(localStorage.getItem('page'))
+            loadData(page)
         },
         error: function () {
             // Handle upload error

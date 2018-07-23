@@ -20,9 +20,15 @@ public class RedirectController {
 
 
     @RequestMapping("/resources/detail/{id}")
-    public String detail(@PathVariable("id") Integer id, String ext, Model model){
+    public String detail(@PathVariable("id") Integer id,
+                         String ext,
+                         String desc,
+                         String t,
+                         Model model){
         model.addAttribute("ext",ext);
         model.addAttribute("id",id);
+        model.addAttribute("desc",desc);
+        model.addAttribute("t",t);
         return "detail";
     }
 }

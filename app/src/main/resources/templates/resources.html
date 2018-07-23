@@ -16,21 +16,6 @@
 <div class="container">
     <a href="index.html" th:href="@{/}">首页</a>
 </div>
-<div class="container">
-    <form method="post" class="form-horizontal" role="form"  enctype="multipart/form-data" action="resources.html" id="upload-file-form"
-          th:action="@{/resources/upload}" >
-        <div class="form-group">
-            <label for="choose_file" class="col-sm-1 control-label">选择文件并上传</label>
-            <div class="col-sm-2">
-                <input type="file" name="file" id="choose_file"/>
-            </div>
-            <div class="col-sm-2">
-                <input type="button" name="上传" id="upload" value="上传" class="btn btn-success btn-lg btn-block" />
-            </div>
-        </div>
-    </form>
-    <span id="upload-file-message"></span>
-</div>
 <hr />
 <div class="container text-center">
     <b>=======资源列表=======</b>
@@ -43,7 +28,7 @@
             <tr>
                 <th>#</th>
                 <th>文件格式</th>
-                <th>上传时间</th>
+                <th>描述</th>
                 <th>查看详情</th>
             </tr>
             </thead>
@@ -66,6 +51,34 @@
             <input type="hidden" id="currentPage">
         </nav>
     </div>
+</div>
+<hr/>
+<div class="container text-center">
+    <b>=======文件上传区域=======</b>
+</div>
+<br>
+<div class="container">
+    <form method="post" class="form-horizontal" role="form"  enctype="multipart/form-data" action="resources.html" id="upload-file-form"
+          th:action="@{/resources/upload}" >
+        <div class="form-group">
+            <label for="choose_file" class="col-sm-1 control-label">选择文件并上传</label>
+            <div class="col-sm-2">
+                <input type="file" name="file" id="choose_file"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="choose_file" class="col-sm-1 control-label">说点什么？</label>
+            <div class="col-sm-2">
+                <textarea cols="40" rows="5" name="desc" id="desc" style="border: 1px solid green"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-2">
+                <input type="button" name="上传" id="upload" value="上传" class="btn btn-success btn-lg btn-block" />
+            </div>
+        </div>
+    </form>
+    <span id="upload-file-message"></span>
 </div>
 </body>
 <script th:inline="javascript">
