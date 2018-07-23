@@ -1,3 +1,6 @@
 body{
     size: landscape;
 }
+#choose_file{
+    border: 2px solid #329123;
+}

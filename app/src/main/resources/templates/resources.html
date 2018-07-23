@@ -20,9 +20,9 @@
     <form method="post" class="form-horizontal" role="form"  enctype="multipart/form-data" action="resources.html" id="upload-file-form"
           th:action="@{/resources/upload}" >
         <div class="form-group">
-            <label for="choose_file" class="col-sm-1 control-label">选择文件</label>
+            <label for="choose_file" class="col-sm-1 control-label">选择文件并上传</label>
             <div class="col-sm-2">
-                <input type="file" name="file" id="choose_file" />
+                <input type="file" name="file" id="choose_file"/>
             </div>
             <div class="col-sm-2">
                 <input type="button" name="上传" id="upload" value="上传" class="btn btn-success btn-lg btn-block" />
@@ -35,6 +35,7 @@
 <div class="container text-center">
     <b>=======资源列表=======</b>
 </div>
+<br/>
 <div class="container">
     <div class="table-responsive">
         <table class="table table-hover">

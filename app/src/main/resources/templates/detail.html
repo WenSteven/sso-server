@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, width=device-width">
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"
+          rel="stylesheet">
     <title>文件详情</title>
 </head>
 <body>
 <div th:if="${ext.equals('1')}" class="container">
-    <img src="detail.html" th:src="@{/resources/get/{id}(id=${id})}" />
+    <img src="detail.html" th:src="@{/resources/get/{id}(id=${id})}" style="width: 100%;height: auto"/>
 </div>
 <div th:if="${ext.equals('2')}" class="container">
     <video src="detail.html" th:src="@{/resources/get/{id}(id=${id})}">video</video>
