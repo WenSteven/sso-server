@@ -16,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
+import sun.awt.OSInfo;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -65,7 +66,14 @@ public class ResourceController {
     private String tempStore(MultipartFile file) throws IOException {
         String fileName=file.getOriginalFilename();
         String ext=fileName.substring(fileName.lastIndexOf("."));
-        String filePath= "/Users/wenqi/Develop/tmp/"+System.currentTimeMillis()+ext;
+        String filePath;
+        if(OSInfo.getOSType()==OSInfo.OSType.MACOSX)
+            filePath= "/Users/wenqi/Develop/tmp/";
+        else if(OSInfo.getOSType()==OSInfo.OSType.LINUX)
+            filePath="/develop/amourling/res/";
+        else
+            throw new IllegalArgumentException("其他系统暂不部署");
+        filePath+=System.currentTimeMillis()+ext;
         Files.write(Paths.get(filePath),file.getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
         return filePath;
     }
