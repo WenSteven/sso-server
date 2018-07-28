@@ -3,7 +3,7 @@ package cn.wenqi.oauth2.web.controller;
 import cn.wenqi.oauth2.constant.CommonConstant;
 import cn.wenqi.oauth2.entity.IResources;
 import cn.wenqi.oauth2.entity.PageInfo;
-import cn.wenqi.oauth2.web.conf.ApiServerProps;
+import cn.wenqi.oauth2.web.conf.UrlSettings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -35,10 +35,10 @@ public class ResourceController {
     @Autowired
     private RestTemplate restTemplate;
 
-    private final ApiServerProps apiServerProps;
+    private final UrlSettings urlSettings;
 
-    public ResourceController(ApiServerProps apiServerProps){
-        this.apiServerProps=apiServerProps;
+    public ResourceController(UrlSettings urlSettings){
+        this.urlSettings = urlSettings;
     }
 
     @RequestMapping("/manage")
@@ -57,7 +57,7 @@ public class ResourceController {
         valueMap.add("file",resource);
         valueMap.add("desc",desc);
         HttpEntity<MultiValueMap<String,Object>> reqEntity=new HttpEntity<>(valueMap,httpHeaders);
-        ResponseEntity<String> responseEntity=restTemplate.exchange(apiServerProps.getUrl()+"/res/add",HttpMethod.POST,reqEntity,String.class);
+        ResponseEntity<String> responseEntity=restTemplate.exchange(urlSettings.getApi()+"/res/add",HttpMethod.POST,reqEntity,String.class);
         Files.delete(Paths.get(filePath));
         assert CommonConstant.SUCCESS.equals(responseEntity.getBody());
         return ResponseEntity.ok("上传成功");
@@ -80,7 +80,7 @@ public class ResourceController {
     @GetMapping("/get/{id}")
     public ResponseEntity<Resource> getResources(@PathVariable("id") Integer id){
         ResponseEntity<Resource> responseEntity=restTemplate
-                .getForEntity(apiServerProps.getUrl()+"/res/get/"+id,Resource.class);
+                .getForEntity(urlSettings.getApi()+"/res/get/"+id,Resource.class);
         return ResponseEntity.ok(responseEntity.getBody());
     }
 
@@ -89,7 +89,7 @@ public class ResourceController {
                                             @RequestParam(defaultValue = "10") Integer pageSize){
         ParameterizedTypeReference<PageInfo<IResources>> typeRef = new ParameterizedTypeReference<PageInfo<IResources>>() {};
         ResponseEntity<PageInfo<IResources>> entity=restTemplate
-                .exchange(apiServerProps.getUrl()+"/res/list?pageNo="+pageNo+"&pageSize="+pageSize,
+                .exchange(urlSettings.getApi()+"/res/list?pageNo="+pageNo+"&pageSize="+pageSize,
                 HttpMethod.GET,null,typeRef);
         assert entity.getStatusCode()!=HttpStatus.INTERNAL_SERVER_ERROR;
         return ResponseEntity.ok(entity.getBody());

@@ -8,12 +8,16 @@ import org.springframework.stereotype.Component;
  * @author wenqi
  * @since v
  */
-@ConfigurationProperties("api")
+@ConfigurationProperties("url")
 @Component
 @Data
-public class ApiServerProps {
+public class UrlSettings {
     /**
      * api服务所在url
      */
-    private String url;
+    private String api;
+    /**
+     * 授权中心地址
+     */
+    private String oauth2;
 }

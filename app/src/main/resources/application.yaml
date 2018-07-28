@@ -31,5 +31,6 @@ logging:
     root: info
 #    org.springframework.security: trace
 #    org.springframework.security.oauth2: INFO
-api:
-  url: http://localhost:9077
+url:
+  api: http://localhost:9077
+  oauth2: http://localhost:8080/uaa

@@ -12,6 +12,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -48,6 +50,8 @@ public class UserServiceApplication extends WebMvcConfigurerAdapter {
         SpringApplication.run(UserServiceApplication.class, args);
     }
 
+
+
     @Configuration
     @Order(-20)
     protected static class LoginConfig extends WebSecurityConfigurerAdapter {
@@ -55,14 +59,21 @@ public class UserServiceApplication extends WebMvcConfigurerAdapter {
         @Autowired
         private  AuthenticationManager authenticationManager;
 
+        @Bean
+        public PasswordEncoder passwordEncoder(){
+            return new BCryptPasswordEncoder();
+        }
+
         @Autowired
         private  DataSource dataSource;
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http
                     .formLogin().loginPage("/login").permitAll()
+                    .and().logout().permitAll()
                     .and()
-                    .requestMatchers().antMatchers("/login", "/oauth/authorize", "/oauth/confirm_access")
+                    .requestMatchers().antMatchers("/login", "/oauth/authorize",
+                    "/oauth/confirm_access","/logout")
                     .and()
                     .authorizeRequests().anyRequest().authenticated()
                     .and().cors().configurationSource(configurationSource());
@@ -113,7 +124,6 @@ public class UserServiceApplication extends WebMvcConfigurerAdapter {
         public TokenStore tokenStore() {
             return new JdbcTokenStore(dataSource);
         }
-
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {

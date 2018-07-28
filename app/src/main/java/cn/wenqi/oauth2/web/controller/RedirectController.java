@@ -1,9 +1,17 @@
 package cn.wenqi.oauth2.web.controller;
 
+import cn.wenqi.oauth2.web.conf.UrlSettings;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  * @author wenqi
@@ -11,6 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class RedirectController {
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private UrlSettings urlSettings;
 
     @RequestMapping("/*")
     public String index(){
@@ -30,5 +44,13 @@ public class RedirectController {
         model.addAttribute("desc",desc);
         model.addAttribute("t",t);
         return "detail";
+    }
+
+    @RequestMapping("/logout")
+    public String logout(HttpServletRequest request){
+        CsrfToken csrfToken=new CookieCsrfTokenRepository().loadToken(request);
+        restTemplate.postForEntity(urlSettings.getOauth2()+"/logout?{1}={2}",null,Boolean.class,
+                csrfToken.getParameterName(),csrfToken.getToken());
+        return "index";
     }
 }
