@@ -1,8 +1,8 @@
 spring:
   datasource:
     password: root
-    username: root
-    url: jdbc:mysql://localhost:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: wenqi1009.
+    url: jdbc:mysql://mysql2service:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
     driver-class-name: com.mysql.jdbc.Driver
     hikari:
       max-lifetime: 1765000
@@ -22,9 +22,6 @@ security:
   oauth2:
     client:
       client-id: web
-      access-token-uri: http://localhost:8080/uaa/oauth/token
-    resource:
-      user-info-uri: http://localhost:8080/uaa/me
   basic:
     enabled: false
 server:
@@ -39,8 +36,20 @@ storage:
   location: /amourling/images/
 spring:
   profiles: prod
+security:
+  oauth2:
+    client:
+      access-token-uri: https://sec.amourling.cn/uaa/oauth/token
+    resource:
+      user-info-uri: https://sec.amourling.cn/uaa/me
 ---
 storage:
   location: /Users/wenqi/Develop/images
 spring:
   profiles: dev
+security:
+  oauth2:
+    client:
+      access-token-uri: http://localhost:8080/uaa/oauth/token
+    resource:
+      user-info-uri: http://localhost:8080/uaa/me

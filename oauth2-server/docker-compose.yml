@@ -4,11 +4,9 @@ services:
     image: mysql:5.6
     container_name: mysqlserver
     ports:
-      - "3306:3306"
+      - "3326:3306"
     environment:
-        MYSQL_PASSWORD: space2018
         MYSQL_DATABASE: space
-        MYSQL_USER: space
         MYSQL_ROOT_PASSWORD: wenqi1009.
   oauth2server:
     build: .

@@ -6,21 +6,15 @@ server:
 security:
   oauth2:
     client:
-      access-token-uri: http://localhost:8080/uaa/oauth/token
       client-id: web
-      user-authorization-uri: http://localhost:8080/uaa/oauth/authorize
       client-secret: web_secret
       scope: read,write
       grant-type: authorization_code
-    resource:
-     user-info-uri: http://localhost:8080/uaa/me
   basic:
     enabled: false
 spring:
   thymeleaf:
     mode: LEGACYHTML5
-  profiles:
-    active: dev
   http:
     multipart:
       enabled: true
@@ -31,6 +25,29 @@ logging:
     root: info
 #    org.springframework.security: trace
 #    org.springframework.security.oauth2: INFO
+---
+security:
+  oauth2:
+    client:
+      access-token-uri: https://sec.amourling.cn/uaa/oauth/token
+      user-authorization-uri: https://sec.amourling.cn/uaa/oauth/authorize
+    resource:
+     user-info-uri: https://sec.amourling.cn/uaa/me
+spring:
+  profiles: prod
+url:
+  api: https://service.amourling.cn
+  oauth2: https://sec.amourling.cn/uaa
+---
+security:
+  oauth2:
+    client:
+      access-token-uri: http://localhost:8080/uaa/oauth/token
+      user-authorization-uri: http://localhost:8080/uaa/oauth/authorize
+    resource:
+     user-info-uri: http://localhost:8080/uaa/me
+spring:
+  profiles: dev
 url:
   api: http://localhost:9077
   oauth2: http://localhost:8080/uaa
