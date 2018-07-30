@@ -31,8 +31,8 @@ logging:
 #    org.springframework.security.oauth2: INFO
 ---
 storage:
-  location:
-spring:/amourling/images/
+  location: /amourling/images/
+spring:
   profiles: prod
   datasource:
    password: OGfwX2xPDNj0oRdy
