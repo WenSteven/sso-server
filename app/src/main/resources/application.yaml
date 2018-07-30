@@ -18,8 +18,8 @@ spring:
   http:
     multipart:
       enabled: true
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: 1024MB
+      max-request-size: 1024MB
 logging:
   level:
     root: info
@@ -31,6 +31,8 @@ security:
     client:
       access-token-uri: https://sec.amourling.cn/uaa/oauth/token
       user-authorization-uri: https://sec.amourling.cn/uaa/oauth/authorize
+      use-current-uri: false
+      pre-established-redirect-uri: https://res.amourling.cn/login
     resource:
      user-info-uri: https://sec.amourling.cn/uaa/me
 spring:

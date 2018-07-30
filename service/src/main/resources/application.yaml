@@ -1,8 +1,6 @@
 spring:
   datasource:
-    password: root
-    username: wenqi1009.
-    url: jdbc:mysql://mysql2service:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    username: root
     driver-class-name: com.mysql.jdbc.Driver
     hikari:
       max-lifetime: 1765000
@@ -16,8 +14,8 @@ spring:
   http:
     multipart:
       enabled: true
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: 1024MB
+      max-request-size: 1024MB
 security:
   oauth2:
     client:
@@ -36,6 +34,9 @@ storage:
   location: /amourling/images/
 spring:
   profiles: prod
+  datasource:
+   password: OGfwX2xPDNj0oRdy
+   url: jdbc:mysql://mysql2service:3306/space01?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
 security:
   oauth2:
     client:
@@ -47,6 +48,9 @@ storage:
   location: /Users/wenqi/Develop/images
 spring:
   profiles: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    password: root
 security:
   oauth2:
     client:

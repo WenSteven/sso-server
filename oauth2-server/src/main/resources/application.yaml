@@ -1,10 +1,8 @@
 spring:
   datasource:
     username: root
-    password: wenqi1009.
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://mysqlserver:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
   thymeleaf:
     mode: LEGACYHTML5
     cache: false
@@ -22,4 +20,15 @@ logging:
     org.hibernate: INFO
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
     org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
-
+---
+spring:
+  datasource:
+    password: root
+    url: jdbc:mysql://localhost:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
+  profiles: dev
+---
+spring:
+  datasource:
+    password: wenqi1009.
+    url: jdbc:mysql://mysqlserver:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
+  profiles: prod
