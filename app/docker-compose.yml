@@ -7,5 +7,5 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
     volumes:
-      - "/opt/dir/tmp:/develop/amourling/res"
+      - "/opt/res:/opt/res"
 

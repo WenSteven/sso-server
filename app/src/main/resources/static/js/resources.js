@@ -46,6 +46,7 @@ function loadData(page) {
 }
 
 $(document).ready(function () {
+    $('#desc').val('')
     localStorage.setItem('page','1');
     loadData(1);
 });

@@ -70,7 +70,7 @@ public class ResourceController {
         if(OSInfo.getOSType()==OSInfo.OSType.MACOSX)
             filePath= "/Users/wenqi/Develop/tmp/";
         else if(OSInfo.getOSType()==OSInfo.OSType.LINUX)
-            filePath="/develop/amourling/res/";
+            filePath="/opt/res/";
         else
             throw new IllegalArgumentException("其他系统暂不部署");
         filePath+=System.currentTimeMillis()+ext;

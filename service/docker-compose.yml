@@ -17,6 +17,6 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: prod
     volumes:
-      - "/opt/dir/res:/amourling/images"
+      - "/opt/res:/opt/res"
 
 

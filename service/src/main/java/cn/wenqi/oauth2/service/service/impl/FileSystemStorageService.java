@@ -78,7 +78,9 @@ public class FileSystemStorageService implements StorageService {
 
     @Override
     public Resource loadAsResource(String filename) {
-        Resource resource = new FileSystemResource(load(filename).toFile());
+        Path path=load(filename);
+        log.info("加载资源的路劲是：{}",path.toString());
+        Resource resource = new FileSystemResource(path.toFile());
         if (resource.exists() || resource.isReadable())
             return resource;
         else
