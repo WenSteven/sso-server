@@ -8,7 +8,7 @@ services:
     environment:
         MYSQL_DATABASE: space01
         MYSQL_ROOT_PASSWORD: OGfwX2xPDNj0oRdy
-  oauth2server:
+  myservice:
     build: .
     ports:
       - "9077:9077"
@@ -16,5 +16,7 @@ services:
       - mysql2service
     environment:
       SPRING_PROFILES_ACTIVE: prod
+    volumes:
+      - "/opt/dir/res:/amourling/images"
 
 

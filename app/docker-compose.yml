@@ -6,5 +6,6 @@ services:
       - "8002:8002"
     environment:
       SPRING_PROFILES_ACTIVE: prod
-
+    volumes:
+      - "/opt/dir/tmp:/develop/amourling/res"
 

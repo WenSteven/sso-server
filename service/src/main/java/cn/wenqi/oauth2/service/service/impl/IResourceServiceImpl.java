@@ -42,7 +42,7 @@ public class IResourceServiceImpl implements IResourceService {
         PageInfo<IResources> pageInfo=new PageInfo<>();
         List<IResources> iResources=page.getContent();
         iResources.parallelStream().forEach(r->{
-                if(videos.contains(r.getExt()))
+                if(videos.contains(r.getExt().toLowerCase()))
                     r.setExt("2");
                 else if(imgs.contains(r.getExt()))
                     r.setExt("1");
