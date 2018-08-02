@@ -1,11 +1,12 @@
-package cn.wenqi.oauth2.service.service.impl;
+package cn.wenqi.oauth2.web.service.impl;
 
 import cn.wenqi.oauth2.entity.IResources;
-import cn.wenqi.oauth2.service.conf.StorageProperties;
-import cn.wenqi.oauth2.service.exception.StorageException;
-import cn.wenqi.oauth2.service.exception.StorageFileNotFoundException;
-import cn.wenqi.oauth2.service.repository.IResourcesRepository;
-import cn.wenqi.oauth2.service.service.StorageService;
+
+import cn.wenqi.oauth2.web.conf.StorageProperties;
+import cn.wenqi.oauth2.web.exception.StorageException;
+import cn.wenqi.oauth2.web.exception.StorageFileNotFoundException;
+import cn.wenqi.oauth2.web.repository.IResourcesRepository;
+import cn.wenqi.oauth2.web.service.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -47,7 +48,8 @@ public class FileSystemStorageService implements StorageService {
         String ext=fileName.substring(fileName.lastIndexOf("."));
         String name=UUID.randomUUID().toString();
         String filePath= rootLocation.toString()+"/"+name+ext;
-        Files.write(Paths.get(filePath),file.getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
+        Path path=Paths.get(filePath);
+        Files.write(path,file.getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
         log.info("已保存，开始写入db...");
         IResources iResources=new IResources();
         iResources.setCreateTime(new Date());

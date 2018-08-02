@@ -1,5 +1,13 @@
 version: '3.3'
 services:
+  mysql2service:
+    image: mysql:5.6
+    container_name: mysql2service
+    ports:
+      - "3336:3306"
+    environment:
+      MYSQL_DATABASE: space01
+      MYSQL_ROOT_PASSWORD: OGfwX2xPDNj0oRdy
   app:
     build: .
     ports:
@@ -8,4 +16,6 @@ services:
       SPRING_PROFILES_ACTIVE: prod
     volumes:
       - "/opt/res:/opt/res"
+    depends_on:
+      - mysql2service
 

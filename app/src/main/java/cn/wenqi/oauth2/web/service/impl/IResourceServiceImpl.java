@@ -1,9 +1,9 @@
-package cn.wenqi.oauth2.service.service.impl;
+package cn.wenqi.oauth2.web.service.impl;
 
 import cn.wenqi.oauth2.entity.IResources;
 import cn.wenqi.oauth2.entity.PageInfo;
-import cn.wenqi.oauth2.service.repository.IResourcesRepository;
-import cn.wenqi.oauth2.service.service.IResourceService;
+import cn.wenqi.oauth2.web.repository.IResourcesRepository;
+import cn.wenqi.oauth2.web.service.IResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

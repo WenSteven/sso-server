@@ -1,8 +1,5 @@
 server:
   port: 8002
-  session:
-    cookie:
-      name: APPSESSIONID
 security:
   oauth2:
     client:
@@ -15,6 +12,12 @@ security:
 spring:
   thymeleaf:
     mode: LEGACYHTML5
+  datasource:
+    username: root
+  jpa:
+      hibernate:
+        ddl-auto: update
+      show-sql: true
   http:
     multipart:
       enabled: true
@@ -23,8 +26,6 @@ spring:
 logging:
   level:
     root: info
-#    org.springframework.security: trace
-#    org.springframework.security.oauth2: INFO
 ---
 security:
   oauth2:
@@ -35,11 +36,13 @@ security:
       pre-established-redirect-uri: https://res.amourling.cn/login
     resource:
      user-info-uri: https://sec.amourling.cn/uaa/me
+storage:
+  location: /opt/res
 spring:
   profiles: prod
-url:
-  api: https://service.amourling.cn
-  oauth2: https://sec.amourling.cn/uaa
+  datasource:
+    password: OGfwX2xPDNj0oRdy
+    url: jdbc:mysql://mysql2service:3306/space01?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
 ---
 security:
   oauth2:
@@ -48,8 +51,10 @@ security:
       user-authorization-uri: http://localhost:8080/uaa/oauth/authorize
     resource:
      user-info-uri: http://localhost:8080/uaa/me
+storage:
+  location: /Users/wenqi/Develop/images
 spring:
   profiles: dev
-url:
-  api: http://localhost:9077
-  oauth2: http://localhost:8080/uaa
+  datasource:
+    url: jdbc:mysql://localhost:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
+    password: root

@@ -21,9 +21,6 @@ import java.util.Map;
 public class RedirectController {
 
     @Autowired
-    private RestTemplate restTemplate;
-
-    @Autowired
     private UrlSettings urlSettings;
 
     @RequestMapping("/*")
@@ -48,9 +45,6 @@ public class RedirectController {
 
     @RequestMapping("/logout")
     public String logout(HttpServletRequest request){
-        CsrfToken csrfToken=new CookieCsrfTokenRepository().loadToken(request);
-        restTemplate.postForEntity(urlSettings.getOauth2()+"/logout?{1}={2}",null,Boolean.class,
-                csrfToken.getParameterName(),csrfToken.getToken());
         return "index";
     }
 }

@@ -1,4 +1,4 @@
-package cn.wenqi.oauth2.service.repository;
+package cn.wenqi.oauth2.web.repository;
 
 import cn.wenqi.oauth2.entity.Clicker;
 import org.springframework.data.jpa.repository.JpaRepository;

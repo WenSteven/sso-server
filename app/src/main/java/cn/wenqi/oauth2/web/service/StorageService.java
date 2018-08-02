@@ -1,4 +1,4 @@
-package cn.wenqi.oauth2.service.service;
+package cn.wenqi.oauth2.web.service;
 
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;

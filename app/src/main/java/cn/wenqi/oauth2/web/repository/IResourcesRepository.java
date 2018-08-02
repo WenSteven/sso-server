@@ -1,10 +1,8 @@
-package cn.wenqi.oauth2.service.repository;
+package cn.wenqi.oauth2.web.repository;
 
 import cn.wenqi.oauth2.entity.IResources;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-
-import java.util.List;
 
 /**
  * @author wenqi

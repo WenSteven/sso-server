@@ -1,4 +1,4 @@
-package cn.wenqi.oauth2.service.service;
+package cn.wenqi.oauth2.web.service;
 
 import cn.wenqi.oauth2.entity.IResources;
 import cn.wenqi.oauth2.entity.PageInfo;

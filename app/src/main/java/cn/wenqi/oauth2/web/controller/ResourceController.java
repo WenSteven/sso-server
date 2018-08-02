@@ -1,27 +1,23 @@
 package cn.wenqi.oauth2.web.controller;
 
-import cn.wenqi.oauth2.constant.CommonConstant;
+import cn.wenqi.oauth2.entity.Clicker;
 import cn.wenqi.oauth2.entity.IResources;
 import cn.wenqi.oauth2.entity.PageInfo;
-import cn.wenqi.oauth2.web.conf.UrlSettings;
+import cn.wenqi.oauth2.entity.Users;
+import cn.wenqi.oauth2.web.repository.ClickerRepository;
+import cn.wenqi.oauth2.web.service.IResourceService;
+import cn.wenqi.oauth2.web.service.StorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.*;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import sun.awt.OSInfo;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+import java.security.Principal;
+import java.util.Date;
 
 /**
  * @author wenqi
@@ -33,13 +29,13 @@ import java.nio.file.StandardOpenOption;
 public class ResourceController {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private StorageService storageService;
 
-    private final UrlSettings urlSettings;
+    @Autowired
+    private IResourceService iResourceService;
 
-    public ResourceController(UrlSettings urlSettings){
-        this.urlSettings = urlSettings;
-    }
+    @Autowired
+    private ClickerRepository clickerRepository;
 
     @RequestMapping("/manage")
     public String page(){
@@ -48,50 +44,29 @@ public class ResourceController {
 
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,String desc) throws IOException {
-        String filePath=tempStore(file);
-        Resource resource=new FileSystemResource(filePath);
-        HttpHeaders httpHeaders=new HttpHeaders();
-        MediaType mediaType=MediaType.parseMediaType("multipart/form-data;charset=UTF-8");
-        httpHeaders.setContentType(mediaType);
-        MultiValueMap<String,Object> valueMap=new LinkedMultiValueMap<>();
-        valueMap.add("file",resource);
-        valueMap.add("desc",desc);
-        HttpEntity<MultiValueMap<String,Object>> reqEntity=new HttpEntity<>(valueMap,httpHeaders);
-        ResponseEntity<String> responseEntity=restTemplate.exchange(urlSettings.getApi()+"/res/add",HttpMethod.POST,reqEntity,String.class);
-        Files.delete(Paths.get(filePath));
-        assert CommonConstant.SUCCESS.equals(responseEntity.getBody());
+        String path=storageService.store(file,desc);
+        log.info("存储path是：{}",path);
         return ResponseEntity.ok("上传成功");
     }
 
-    private String tempStore(MultipartFile file) throws IOException {
-        String fileName=file.getOriginalFilename();
-        String ext=fileName.substring(fileName.lastIndexOf("."));
-        String filePath;
-        if(OSInfo.getOSType()==OSInfo.OSType.MACOSX)
-            filePath= "/Users/wenqi/Develop/tmp/";
-        else if(OSInfo.getOSType()==OSInfo.OSType.LINUX)
-            filePath="/opt/res/";
-        else
-            throw new IllegalArgumentException("其他系统暂不部署");
-        filePath+=System.currentTimeMillis()+ext;
-        Files.write(Paths.get(filePath),file.getBytes(),StandardOpenOption.CREATE,StandardOpenOption.APPEND);
-        return filePath;
-    }
+
     @GetMapping("/get/{id}")
-    public ResponseEntity<Resource> getResources(@PathVariable("id") Integer id){
-        ResponseEntity<Resource> responseEntity=restTemplate
-                .getForEntity(urlSettings.getApi()+"/res/get/"+id,Resource.class);
-        return ResponseEntity.ok(responseEntity.getBody());
+    public ResponseEntity<Resource> getResources(@PathVariable("id") Integer id, Principal principal){
+        IResources iResources=iResourceService.selectById(id);
+        String name=iResources.getName()+"."+iResources.getExt();
+        Clicker clicker=new Clicker();
+        clicker.setClickTime(new Date());
+        clicker.setIResources(iResources);
+        Users users=new Users();
+        users.setUserName(principal.getName());
+        clicker.setUsers(users);
+        clickerRepository.save(clicker);
+        return ResponseEntity.ok(storageService.loadAsResource(name));
     }
 
     @GetMapping("/list")
     public ResponseEntity<PageInfo> getList(@RequestParam(defaultValue = "0") Integer pageNo,
                                             @RequestParam(defaultValue = "10") Integer pageSize){
-        ParameterizedTypeReference<PageInfo<IResources>> typeRef = new ParameterizedTypeReference<PageInfo<IResources>>() {};
-        ResponseEntity<PageInfo<IResources>> entity=restTemplate
-                .exchange(urlSettings.getApi()+"/res/list?pageNo="+pageNo+"&pageSize="+pageSize,
-                HttpMethod.GET,null,typeRef);
-        assert entity.getStatusCode()!=HttpStatus.INTERNAL_SERVER_ERROR;
-        return ResponseEntity.ok(entity.getBody());
+        return ResponseEntity.ok(iResourceService.select(pageNo, pageSize));
     }
 }
