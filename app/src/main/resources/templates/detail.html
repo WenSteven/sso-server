@@ -6,8 +6,7 @@
     <link href="/webjars/bootstrap/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"
           rel="stylesheet">
     <script src="/webjars/jquery/jquery.min.js" th:src="@{/webjars/jquery/3.1.0/jquery.js}"></script>
-    <link href="//vjs.zencdn.net/7.0/video-js.min.css" rel="stylesheet">
-    <script src="//vjs.zencdn.net/7.0/video.min.js"></script>
+    <script src="https://s3.ssl.qhres.com/!fd546749/chimee-player.browser.js" type="text/javascript"></script>
     <title>文件详情</title>
 </head>
 <body>
@@ -22,21 +21,29 @@
     <img src="detail.html" th:src="@{/resources/get/{id}(id=${id})}" style="width: 100%;height: auto"/>
 </div>
 <div th:if="${ext.equals('2')}" class="container">
-    <video
-            id="my-player"
-            class="video-js vjs-fluid"
-            controls
-            preload="auto"
-            poster="/resources/get/3"
-            data-setup='{}'>
-        <source th:src="@{/resources/get/{id}(id=${id})}" type="video/mp4" />
-    </video>
-    <script>
-        var options = {};
-        var player = videojs('my-player', options, function onPlayerReady() {
-            this.on('ended', function() {
-                alert('看完了可千万别自己乱来啊啊啊啊！！')
-            });
+    <div class="chimee-container">
+        <video tabindex="-1"></video>
+    </div>
+    <script th:inline="javascript">
+        // var adSrc=/*[[]]*/ 'https://p.ssl.qhimg.com/t018fe4570caeb23e44.png'
+        var videoSrc=/*[['/resources/get/'+${id}]]*/ location.protocol+'//chimee.org/vod/1.mp4'
+        // var aggdPlugin = ChimeePlayer.popupFactory({
+        //     name: 'time-ad',
+        //     className: 'time-ad',
+        //     title: false,
+        //     body: '<em>广告示例</em><a href="https://jia.360.cn" target="_blank"><img src=adSrc></a>',
+        //     offset: '0px 10px auto auto',
+        //     operable: false
+        // });
+        // ChimeePlayer.install(aggdPlugin);
+        var player = new ChimeePlayer({
+            wrapper: '.chimee-container',
+            src: videoSrc,
+            isLive: false,
+            box:'native',
+            autoplay: false,
+            controls: true,
+            // plugin: [aggdPlugin.name]
         });
     </script>
 </div>
