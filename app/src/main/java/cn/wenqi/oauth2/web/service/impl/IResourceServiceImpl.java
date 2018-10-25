@@ -38,7 +38,7 @@ public class IResourceServiceImpl implements IResourceService {
         // ext 0:其他  1：图片 2：视频
         Specification<IResources> specification= (root, criteriaQuery, criteriaBuilder) ->
                 criteriaQuery.orderBy(criteriaBuilder.desc(root.get("createTime").as(Date.class))).getRestriction();
-        Page<IResources> page= iResourcesRepository.findAll(specification,new PageRequest(pageNo-1,pageSize));
+        Page<IResources> page= iResourcesRepository.findAll(specification, PageRequest.of(pageNo-1,pageSize));
         PageInfo<IResources> pageInfo=new PageInfo<>();
         List<IResources> iResources=page.getContent();
         iResources.parallelStream().forEach(r->{
@@ -57,6 +57,6 @@ public class IResourceServiceImpl implements IResourceService {
 
     @Override
     public IResources selectById(Integer id) {
-        return iResourcesRepository.findOne(id);
+        return iResourcesRepository.findById(id).orElse(null);
     }
 }

@@ -3,6 +3,7 @@ package cn.wenqi.oauth2;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.io.IOException;
 
@@ -22,5 +23,7 @@ public class AppTest
 
     @Test
     public void  test1() throws IOException {
+        BCryptPasswordEncoder bCryptPasswordEncoder=new BCryptPasswordEncoder();
+        System.out.println(bCryptPasswordEncoder.encode("web_secret"));
     }
 }

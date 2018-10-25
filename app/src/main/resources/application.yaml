@@ -5,7 +5,7 @@ security:
     client:
       client-id: web
       client-secret: web_secret
-      scope: read,write
+      scope: role_superadmin
       grant-type: authorization_code
   basic:
     enabled: false
