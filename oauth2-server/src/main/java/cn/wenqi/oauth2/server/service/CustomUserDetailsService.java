@@ -3,6 +3,7 @@ package cn.wenqi.oauth2.server.service;
 
 import cn.wenqi.oauth2.server.entity.User;
 import cn.wenqi.oauth2.server.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
  *
  */
 @Service(value = "userDetailsService")
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
 	@Autowired
@@ -23,8 +25,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String input) {
-		User user = null;
-
+		log.info("读取用户信息：{}",input);
+		User user;
 		if (input.contains("@"))
 			user = userRepository.findByEmail(input);
 		else
@@ -34,7 +36,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 			throw new BadCredentialsException("Bad credentials");
 
 		new AccountStatusUserDetailsChecker().check(user);
-
 		return user;
 	}
 

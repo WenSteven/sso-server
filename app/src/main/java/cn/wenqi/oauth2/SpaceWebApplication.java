@@ -20,7 +20,10 @@ public class SpaceWebApplication extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/*").permitAll()
+                .antMatchers("/*","/webjars/**").permitAll()
+                .and()
+                .httpBasic().disable()
+                .authorizeRequests()
                 .anyRequest().authenticated()
                 .and().logout().logoutSuccessUrl("/").permitAll()
                 .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());

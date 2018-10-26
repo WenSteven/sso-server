@@ -1,5 +1,9 @@
 server:
   port: 8002
+  servlet:
+    session:
+      cookie:
+        name: app-cookies
 security:
   oauth2:
     client:
@@ -7,8 +11,6 @@ security:
       client-secret: web_secret
       scope: role_superadmin
       grant-type: authorization_code
-  basic:
-    enabled: false
 spring:
   thymeleaf:
     mode: LEGACYHTML5
@@ -18,7 +20,7 @@ spring:
       hibernate:
         ddl-auto: update
       show-sql: true
-  http:
+  servlet:
     multipart:
       enabled: true
       max-file-size: 1024MB
@@ -50,7 +52,7 @@ security:
       access-token-uri: http://localhost:8080/uaa/oauth/token
       user-authorization-uri: http://localhost:8080/uaa/oauth/authorize
     resource:
-     user-info-uri: http://localhost:8080/uaa/me
+     user-info-uri: http://localhost:8080/uaa/userInfo
 storage:
   location: /Users/wenqi/Develop/images
 spring:
