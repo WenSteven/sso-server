@@ -1,6 +1,7 @@
 package cn.wenqi.oauth2.server.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -10,8 +11,11 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.A
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
+import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
+import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
@@ -53,6 +57,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.jdbc(dataSource);
     }
 
+
+    @Bean
+    @ConditionalOnBean(DataSource.class)
+    public ClientDetailsService clientDetailsService(){
+        return new JdbcClientDetailsService(dataSource);
+    }
+
     @Bean
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
@@ -66,13 +77,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return defaultTokenServices;
     }
 
+    @Autowired
+    private UserApprovalHandler userApprovalHandler;
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
         endpoints.tokenStore(tokenStore())
                 .authenticationManager(authenticationManager)
                 .approvalStore(approvalStore())
-                .authorizationCodeServices(authorizationCodeServices());
+                .authorizationCodeServices(authorizationCodeServices())
+                .userApprovalHandler(userApprovalHandler);
     }
 
     @Override

@@ -76,13 +76,11 @@ public class User extends BaseIdEntity implements UserDetails {
 	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		Set<GrantedAuthority> authorities = new HashSet<>();
 
 		roles.forEach(r -> {
 			authorities.add(new SimpleGrantedAuthority(r.getName()));
-			r.getPermissions().forEach(p -> {
-				authorities.add(new SimpleGrantedAuthority(p.getName()));
-			});
+			r.getPermissions().forEach(p -> authorities.add(new SimpleGrantedAuthority(p.getName())));
 		});
 
 		return authorities;

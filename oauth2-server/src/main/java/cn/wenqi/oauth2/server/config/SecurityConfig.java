@@ -3,7 +3,6 @@ package cn.wenqi.oauth2.server.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,13 +11,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
+import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 /**
  * @author wenqi
  * @since v
  */
 @Configuration
-@Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -53,6 +55,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    }
+
+    @Autowired
+    private ClientDetailsService clientDetailsService;
+
+    @Bean
+    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore){
+        TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
+        handler.setTokenStore(tokenStore);
+        handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
+        handler.setClientDetailsService(clientDetailsService);
+        return handler;
     }
 
 }
