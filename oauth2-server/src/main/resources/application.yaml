@@ -15,9 +15,6 @@ server:
     session:
       cookie:
         name: oauth-server
-management:
-  security:
-    enabled: false
 
 logging:
   level:

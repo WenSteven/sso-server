@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -26,7 +27,7 @@ import javax.sql.DataSource;
 
 /**
  * @author wenqi
- * @since v
+ * @since v1.1
  */
 @Configuration
 @EnableAuthorizationServer
@@ -54,7 +55,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(dataSource);
+        clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
     }
 
 
@@ -80,6 +81,9 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private UserApprovalHandler userApprovalHandler;
 
+    @Autowired
+    private UserDetailsService userDetailsService;
+
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
@@ -87,7 +91,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager)
                 .approvalStore(approvalStore())
                 .authorizationCodeServices(authorizationCodeServices())
-                .userApprovalHandler(userApprovalHandler);
+                .userApprovalHandler(userApprovalHandler)
+                .userDetailsService(userDetailsService);
     }
 
     @Override

@@ -15,7 +15,6 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
  */
 @Configuration
 @EnableResourceServer
-@Order(1)
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     @Autowired
