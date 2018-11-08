@@ -22,10 +22,9 @@ public class SpaceWebApplication extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/*","/webjars/**").permitAll()
                 .and()
-                .httpBasic().disable()
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and().logout().logoutSuccessUrl("/").permitAll()
-                .and().csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                .and().csrf().disable();
     }
 }
