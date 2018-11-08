@@ -8,6 +8,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -25,7 +26,7 @@ import org.springframework.web.filter.CorsFilter;
  * @since v
  */
 @Configuration
-@Order(2)
+//@Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -49,9 +50,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().logout().permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/webjars/**","/oauth/**").permitAll()
+                .antMatchers("/oauth/**").permitAll()
                 .and()
                 .authorizeRequests().anyRequest().authenticated();
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/webjars/**");
+
     }
 
     @Autowired
@@ -62,17 +69,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
-    @Autowired
-    private ClientDetailsService clientDetailsService;
-
-    @Bean
-    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore){
-        TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
-        handler.setTokenStore(tokenStore);
-        handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService));
-        handler.setClientDetailsService(clientDetailsService);
-        return handler;
-    }
 
 
     @Bean

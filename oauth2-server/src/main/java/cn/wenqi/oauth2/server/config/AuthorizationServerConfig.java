@@ -15,10 +15,12 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.approval.ApprovalStore;
 import org.springframework.security.oauth2.provider.approval.JdbcApprovalStore;
+import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
 import org.springframework.security.oauth2.provider.approval.UserApprovalHandler;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
@@ -60,7 +62,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
 
     @Bean
-    @ConditionalOnBean(DataSource.class)
     public ClientDetailsService clientDetailsService(){
         return new JdbcClientDetailsService(dataSource);
     }
@@ -78,8 +79,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         return defaultTokenServices;
     }
 
-    @Autowired
-    private UserApprovalHandler userApprovalHandler;
+    @Bean
+    public TokenStoreUserApprovalHandler userApprovalHandler(TokenStore tokenStore){
+        TokenStoreUserApprovalHandler handler = new TokenStoreUserApprovalHandler();
+        handler.setTokenStore(tokenStore);
+        handler.setRequestFactory(new DefaultOAuth2RequestFactory(clientDetailsService()));
+        handler.setClientDetailsService(clientDetailsService());
+        return handler;
+    }
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -91,13 +98,17 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authenticationManager(authenticationManager)
                 .approvalStore(approvalStore())
                 .authorizationCodeServices(authorizationCodeServices())
-                .userApprovalHandler(userApprovalHandler)
+                .userApprovalHandler(userApprovalHandler(tokenStore()))
                 .userDetailsService(userDetailsService);
     }
+
+    private static final String REALM="my-oauth2-realm";
 
     @Override
     public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
         oauthServer.tokenKeyAccess("permitAll()")
-                .checkTokenAccess("isAuthenticated()").passwordEncoder(passwordEncoder);
+                .checkTokenAccess("isAuthenticated()")
+                .allowFormAuthenticationForClients();
+//                .realm(REALM+"/client");
     }
 }
