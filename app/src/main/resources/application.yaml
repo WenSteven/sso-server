@@ -9,7 +9,7 @@ security:
     client:
       client-id: web
       client-secret: web_secret
-      scope: role_superadmin
+      scope: read,write
       grant-type: authorization_code
 spring:
   thymeleaf:
@@ -52,7 +52,7 @@ security:
       access-token-uri: http://localhost:8080/uaa/oauth/token
       user-authorization-uri: http://localhost:8080/uaa/oauth/authorize
     resource:
-     user-info-uri: http://localhost:8080/uaa/userInfo
+     user-info-uri: http://localhost:8003/res/userInfo
 storage:
   location: /Users/wenqi/Develop/images
 spring:

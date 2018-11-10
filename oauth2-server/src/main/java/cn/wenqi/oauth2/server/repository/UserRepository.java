@@ -1,6 +1,6 @@
 package cn.wenqi.oauth2.server.repository;
 
-import cn.wenqi.oauth2.server.entity.User;
+import cn.wenqi.oauth2.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

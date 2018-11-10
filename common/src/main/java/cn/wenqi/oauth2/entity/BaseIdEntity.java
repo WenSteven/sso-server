@@ -1,4 +1,4 @@
-package cn.wenqi.oauth2.server.entity;
+package cn.wenqi.oauth2.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

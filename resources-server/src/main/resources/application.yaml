@@ -1,0 +1,12 @@
+
+spring:
+  datasource:
+    username: root
+#    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    password: root
+    url: jdbc:mysql://localhost:3306/space?useUnicode=true&characterEncoding=UTF8&autoReconnect=true&rewriteBatchedStatements=TRUE&autoReconnectForPools=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8&zeroDateTimeBehavior=convertToNull&useSSL=false
+server:
+  port: 8003
+  servlet:
+    context-path: /res

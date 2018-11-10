@@ -1,7 +1,7 @@
 package cn.wenqi.oauth2.server.service;
 
 
-import cn.wenqi.oauth2.server.entity.User;
+import cn.wenqi.oauth2.entity.User;
 import cn.wenqi.oauth2.server.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
