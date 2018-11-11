@@ -3,7 +3,7 @@
 ## 模块介绍：
 
 1. app项目是其他需要授权的应用
-2. oauth2-server模块是oauth2授权中心，包括授权服务和资源服务配置
+2. oauth2-server模块是oauth2授权中心
 3. resources-server模块是oauth2资源服务
 
 >当然也可以直接通过postman或者curl测试不同授权模式下的效果
