@@ -7,13 +7,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 
 /**
- * 
- * <h2>Permission</h2>
- * 
- * @author Kristijan Georgiev
- * 
- *         Permission entity
- *
+ * 权限
+ * @author wenqi
  */
 
 @Data

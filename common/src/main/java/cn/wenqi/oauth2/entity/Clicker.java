@@ -28,7 +28,7 @@ public class Clicker {
 
     @OneToOne
     @JoinColumn(name = "uid")
-    private Users users;
+    private User users;
     /**
      * 点击时间
      */

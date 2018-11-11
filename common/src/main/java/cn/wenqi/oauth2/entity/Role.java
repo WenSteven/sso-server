@@ -8,13 +8,8 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * 
- * <h2>Role</h2>
- * 
- * @author Kristijan Georgiev
- * 
- *         Role entity
- *
+ * 角色 比如管理员角色等，角色下还有不同的权限 {@link Permission}
+ * @author wenqi
  */
 
 @Data

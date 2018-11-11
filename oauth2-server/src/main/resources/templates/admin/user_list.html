@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>用户管理</title>
+    <link rel="stylesheet" href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.css}"/>
+</head>
+<body>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1" sec:authorize="hasRole('ROLE_OAUTH_ADMIN')">
+        <h2>Clients</h2>
+        <table class="table table-bordered">
+            <tr>
+                <th>username</th>
+                <th>email</th>
+                <th>roles</th>
+            </tr>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.username}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.roles}"></td>
+                <td>
+                    <a class="btn btn-default btn-xs" th:href="@{/users/edit(uid=${user.id})}">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </a>
+                    <a class="btn btn-default btn-xs" th:href="@{/users/delete(uid=${user.id})}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    <a class="btn btn-default btn-xs pull-right" href="/clients/form" th:href="@{/users/form}">
+                        <span class="glyphicon glyphicon-plus"></span>
+                    </a>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

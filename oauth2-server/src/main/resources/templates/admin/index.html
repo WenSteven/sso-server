@@ -13,8 +13,11 @@
     <div class="row">
         <div class="col-md-12" >
             <span sec:authorize="isAuthenticated()" style="display: inline-block;">
-                    <a th:href="@{/logout}">Sign Out</a>
+                    <a th:href="@{/logout}">登出</a>
                 </span>
+        </div>
+        <div class="col-md-12" >
+                    <a th:href="@{/users/list}">用户管理</a>
         </div>
     </div>
 
@@ -33,19 +36,17 @@
                     <th>Actions</th>
                 </tr>
                 <tr th:each="app : ${approvals}">
-                    <td th:value="${app.clientId}"></td>
-                    <td th:value="${app.scope}"></td>
-                    <td th:value="${app.expiresAt}"></td>
-                    <td th:value="${app.scope}"></td>
+                    <td th:text="${app.clientId}"></td>
+                    <td th:text="${app.scope}"></td>
+                    <td th:text="${app.expiresAt}"></td>
+                    <td th:text="${app.scope}"></td>
                     <td>
-                        <form action="/approval/revoke" method="POST">
+                        <form action="/approval/revoke" th:action="@{/approval/revoke}" method="POST">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                             <input type="hidden" name="userId" th:value="${app.userId}"/>
                             <input type="hidden" name="clientId" th:value="${app.clientId}"/>
                             <input type="hidden" name="scope" th:value="${app.scope}"/>
-                            <input type="hidden" name="expiresAt" th:value="${#dates.format(app.expiresAt, 'yyyy-MM-dd HH:mm:ss')}"/>
                             <input type="hidden" name="status" th:value="${app.status}"/>
-                            <input type="hidden" name="lastUpdatedAt" th:value="${#dates.format(app.lastUpdatedAt, 'yyyy-MM-dd HH:mm:ss')}"/>
                             <button type="submit" class="btn btn-default btn-xs">
                                 <span class="glyphicon glyphicon-trash"></span>
                             </button>
