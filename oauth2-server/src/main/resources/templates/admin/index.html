@@ -16,7 +16,7 @@
                     <a th:href="@{/logout}">登出</a>
                 </span>
         </div>
-        <div class="col-md-12" >
+        <div class="col-md-12" sec:authorize="hasRole('ROLE_OAUTH_ADMIN')">
                     <a th:href="@{/users/list}">用户管理</a>
         </div>
     </div>

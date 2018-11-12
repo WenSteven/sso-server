@@ -67,6 +67,7 @@ public class ClientsController {
     }
 
     @RequestMapping(value = "/{client.clientId}/delete", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ROLE_OAUTH_ADMIN')")
     public String deleteClient(@ModelAttribute BaseClientDetails clientDetails, @PathVariable("client.clientId") String id) {
         clientsDetailsService.removeClientDetails(clientsDetailsService.loadClientByClientId(id).toString());
         return "redirect:/";

@@ -71,17 +71,12 @@ public class User extends BaseIdEntity implements UserDetails {
 		return !accountNonLocked;
 	}
 
-	/*
-	 * Get roles and permissions and add them as a Set of GrantedAuthority
-	 */
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		Set<GrantedAuthority> authorities = new HashSet<>();
 
-		roles.forEach(r -> {
-			authorities.add(new SimpleGrantedAuthority(r.getName()));
-			r.getPermissions().forEach(p -> authorities.add(new SimpleGrantedAuthority(p.getName())));
-		});
+		roles.forEach(r -> authorities.add(new SimpleGrantedAuthority(r.getName())));
 
 		return authorities;
 	}

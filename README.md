@@ -9,7 +9,7 @@
 >当然也可以直接通过postman或者curl测试不同授权模式下的效果
 
 ## 数据库说明
-1. 应用启动的时候会自动创建，参考oauth2-server模块下的`data.sql`和`schema.sql`
+1. 应用启动的时候会自动创建，参考db文件夹下的`data.sql`和`schema.sql`
 
 ## 如果运行呢？
 
