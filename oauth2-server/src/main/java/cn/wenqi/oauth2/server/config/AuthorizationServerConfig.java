@@ -1,5 +1,6 @@
 package cn.wenqi.oauth2.server.config;
 
+import cn.wenqi.oauth2.server.exception.AuthExceptionEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.oauth2.provider.approval.TokenStoreUserAppro
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.JdbcAuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.error.WebResponseExceptionTranslator;
 import org.springframework.security.oauth2.provider.request.DefaultOAuth2RequestFactory;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -57,6 +59,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         clients.jdbc(dataSource).passwordEncoder(passwordEncoder);
     }
 
+    @Autowired
+    private WebResponseExceptionTranslator webResponseExceptionTranslator;
 
     @Bean
     public JdbcClientDetailsService clientDetailsService(){
@@ -100,6 +104,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizationCodeServices(authorizationCodeServices())
                 .userApprovalHandler(userApprovalHandler(tokenStore()))
                 .userDetailsService(userDetailsService);
+
+        endpoints.exceptionTranslator(webResponseExceptionTranslator);
     }
 
     @Override
@@ -107,5 +113,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         oauthServer.tokenKeyAccess("permitAll()")
                 .checkTokenAccess("isAuthenticated()")
                 .allowFormAuthenticationForClients();
+        oauthServer.authenticationEntryPoint(new AuthExceptionEntryPoint());
     }
 }
