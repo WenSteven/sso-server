@@ -15,8 +15,6 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
 import java.security.Principal;
@@ -67,5 +65,10 @@ public class ResourcesServerApplication extends ResourceServerConfigurerAdapter 
     @GetMapping("/userInfo")
     public Principal principal(Principal principal){
         return principal;
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests().antMatchers("/goods/**").permitAll();
     }
 }
