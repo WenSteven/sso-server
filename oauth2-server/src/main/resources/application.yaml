@@ -20,10 +20,6 @@ logging:
   level:
     root: info
     org.springframework.security: trace
-    org.springframework.jdbc: trace
-    org.hibernate: INFO
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.hibernate.type.descriptor.sql.BasicExtractor: TRACE
 ---
 spring:
   datasource:
